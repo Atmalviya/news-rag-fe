@@ -17,8 +17,8 @@ export default function Chat() {
   const [streamingContent, setStreamingContent] = useState('');
   const [streamingSources, setStreamingSources] = useState(null);
   const eventSourceRef = useRef(null);
+  const BASE_URL = "http://news-rag-api.atmalviya.cloud";
 
-  // Load sessions from localStorage on initial render
   useEffect(() => {
     const savedSessions = localStorage.getItem('chatSessions');
     if (savedSessions) {
@@ -47,7 +47,7 @@ export default function Chat() {
   // Create new session function
   const createNewSession = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/session');
+      const response = await axios.post(`${BASE_URL}/api/session`);
       const sessionData = {
         id: response.data.sessionId,
         createdAt: Date.now(),
@@ -87,7 +87,7 @@ export default function Chat() {
 
     // Create new EventSource
     const eventSource = new EventSource(
-      `http://localhost:3000/api/chat?sessionId=${sessionId}&message=${encodeURIComponent(message)}`
+      `${BASE_URL}/api/chat?sessionId=${sessionId}&message=${encodeURIComponent(message)}`
     );
     eventSourceRef.current = eventSource;
 
@@ -166,7 +166,7 @@ export default function Chat() {
     queryFn: async () => {
       if (!sessionId) return [];
       try {
-        const response = await axios.get(`http://localhost:3000/api/session/${sessionId}/history`);
+        const response = await axios.get(`${BASE_URL}/api/session/${sessionId}/history`);
         // Update local messages when history is fetched
         setLocalMessages(response.data.history);
         return response.data.history;
@@ -182,7 +182,7 @@ export default function Chat() {
   const clearHistory = useMutation({
     mutationFn: async () => {
       try {
-        await axios.delete(`http://localhost:3000/api/session/${sessionId}/history`);
+        await axios.delete(`${BASE_URL}/api/session/${sessionId}/history`);
       } catch (error) {
         console.error('Error clearing history:', error);
         throw error;
