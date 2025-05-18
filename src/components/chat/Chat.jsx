@@ -17,7 +17,7 @@ export default function Chat() {
   const [streamingContent, setStreamingContent] = useState('');
   const [streamingSources, setStreamingSources] = useState(null);
   const eventSourceRef = useRef(null);
-  const BASE_URL = "http://news-rag-api.atmalviya.cloud";
+  const BASE_URL = "https://news-rag-api.atmalviya.cloud";
 
   useEffect(() => {
     const savedSessions = localStorage.getItem('chatSessions');
